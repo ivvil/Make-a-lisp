@@ -35,17 +35,21 @@ int main(int argc, char** argv) {
 
   mpc_parser_t* num = mpc_new("num");
   mpc_parser_t* op = mpc_new("op");
+  mpc_parser_t* op_s = mpc_new("ops");
+  mpc_parser_t* op_t = mpc_new("opt");
   mpc_parser_t* exp = mpc_new("exp");
   mpc_parser_t* chisp = mpc_new("chsp");
 
   mpca_lang(MPCA_LANG_DEFAULT,
 			"                                                     \
     num : /-?[0-9]+/ ;											  \
-    op : '+' | '-' | '*' | '/' | '%' ;							  \
+    ops : '+' | '-' | '*' | '/' | '%' ;							  \
+    opt : \"add\" | \"sub\" | \"mul\" | \"div\" | \"mod\" ;		  \
+    op : <opt> | <ops> ;										  \
     exp : <num> | '(' <op> <exp>+ ')' ;							  \
     chsp : /^/ <op> <exp>+ /$/ ;								  \
   ",
-			num, op, exp, chisp);
+			num, op_s, op_t, op, exp, chisp);
 
   /* Print Version and Exit Information */
   puts("Chisp 0.0.1");
@@ -69,7 +73,7 @@ int main(int argc, char** argv) {
 
   }
 
-  mpc_cleanup(4, num, op, exp, chisp);
+  mpc_cleanup(4, num, op_s, op_t, op, exp, chisp);
 
   return 0;
 }
