@@ -3,6 +3,35 @@
 
 #include <editline.h>
 
+/* Windows edtline fakery */
+#ifdef _WIN32
+#include <string.h>
+
+static char inBuff[2048];
+
+/* Readline */
+
+char* readline(char* prompt) {
+  fputs(prompt, stdout);
+  fgets(inBuff, 2048, stdin);
+
+  char* copy = malloc(strlen(buffer)+1);
+  strcpy(copy, buffer);
+
+  copy[strlen(copy)-1] = '\0';
+
+  return copy;
+}
+
+void add_history(char* unused) {}
+
+#else
+#include <editline.h>
+
+#endif // _WIN32
+
+
+
 int main(int argc, char** argv) {
 
   /* Print Version and Exit Information */
